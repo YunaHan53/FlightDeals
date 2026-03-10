@@ -9,11 +9,13 @@ for row in sheet_data:
     row_id = row["id"]
     city = row["city"]
     code = row["iataCode"]
-    data = {
-        "city": city
-    }
-    iata_code = flights.get_flight_search(data)
-    row["iataCode"] = iata_code
-    data_manager.post_data(row_id, iata_code)
 
-print(sheet_data)
+    # Only fetch if iataCode is empty
+    if code == "":
+        iata_codes = flights.get_iata_code(city)
+        print(f"{city} -> {iata_codes}")
+
+        row["iataCode"] = iata_codes
+        data_manager.post_data(row_id, iata_codes)
+
+# print(sheet_data)
